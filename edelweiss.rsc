@@ -36,6 +36,16 @@
 
 
 # Применение:
+# $deCon
+
+:global deCon do={
+	[/ip firewall connection print without-paging];
+	set $Ia [/ip firewall connection print count-only];
+	for I from=0 to=($Ia-1) do={[/ip firewall connection remove $I];}
+}
+
+
+# Применение:
 # ([$foDte Date=[$cuDte]]->0) - Возвращает секунды.
 # ([$foDte Date=[$cuDte]]->1) - Возвращает форматированную дату и время.
 # ([$foDte Date=[/file get number=НомерФайла value-name=creation-time]]->0) - дата создания файла в секундах.
