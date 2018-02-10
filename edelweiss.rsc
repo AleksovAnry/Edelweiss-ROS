@@ -1,20 +1,3 @@
-# Добавляем в том случае, если библиотека не стартует вместе с системой.
-/system script run "Edelweiss";
-# Перечисляем нужные функции. Не стоит включать в каждый скрипт все функции сразу,
-# добавляем только те, которые будут реально использоваться.
-	:global mlFrm;
-	:global syNme;
-	:global cuDte;
-	:global beMel;
-	:global deArp;
-	:global deCon;
-	:global foDte;
-	:global ifSta;
-	:global ifDis;
-	:global ifRun;
-	:global flDel;
-	:global mkDir;
-	:global flCre;
 	
 # Поле "от кого" для E-mail. 
 :global mlFrm [/tool e-mail get from];
