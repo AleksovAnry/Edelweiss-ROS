@@ -13,6 +13,7 @@
 	:global ifDis;
 	:global ifRun;
 	:global flDel;
+	:global drCre;
 	:global flCre;
 	
 # Поле "от кого" для E-mail. 
@@ -177,6 +178,32 @@
 			delay 100ms;
 		}
 	} while ($Nm>0);
+}
+
+
+# Применение:
+# $drCre Address="IP на котором работает FTP" User="Имя пользователя" Password="Пароль" Input="Имя создаваемой директории, строкой или массивом" Name="Имя скрипта"
+# Можно не указывать адрес, в этом случае будет использован первый из доступных IP на маршрутизаторе.
+# $drCre User="Имя пользователя" Password="Пароль" Input="Имя создаваемой директории, строкой или массивом" Name="Имя скрипта"
+# $drCre Address="172.16.0.1" User="user" Password="Passwd" Input=({"sync";"backup";"scripts";"log";"config"}) Name="scriptName"
+
+:global drCre do={
+	set $Nm [len $Input];
+	set $IP [/ip address get 1 address];
+	/system identity export file=id.rsc
+	if ([typeof $Address]="nothing") do={set $Address [pick $IP 0 [find $IP "/"]];}
+
+	do {
+		if ([typeof $Input]="array") do={set $Nm ($Nm-1);set $Bn ($Input->$Nm);} else={set $Nm 0;set $Bn $Input;}
+		log info "$Name:: Start creating $Bn directory";
+		set $Pth ($Bn . "/1");
+		/tool fetch address=($Address) mode=ftp user=($User) password=($Password) 	src-path=id.rsc dst-path=($Pth)
+		delay 3s;
+		/file remove $Pth
+		log info "$Name:: Done creating $Bn directory";
+		beep frequency=1975 length=10ms;
+		delay 1s;
+	} while ($Nm>0 && [typeof $Input]="array");
 }
 
 
