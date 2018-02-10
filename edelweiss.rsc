@@ -13,7 +13,7 @@
 	:global ifDis;
 	:global ifRun;
 	:global flDel;
-	:global drCre;
+	:global mkDir;
 	:global flCre;
 	
 # Поле "от кого" для E-mail. 
@@ -182,12 +182,12 @@
 
 
 # Применение:
-# $drCre Address="IP на котором работает FTP" User="Имя пользователя" Password="Пароль" Input="Имя создаваемой директории, строкой или массивом" Name="Имя скрипта"
+# $mkDir Address="IP на котором работает FTP" User="Имя пользователя" Password="Пароль" Input="Имя создаваемой директории, строкой или массивом" Name="Имя скрипта"
 # Можно не указывать адрес, в этом случае будет использован первый из доступных IP на маршрутизаторе.
-# $drCre User="Имя пользователя" Password="Пароль" Input="Имя создаваемой директории, строкой или массивом" Name="Имя скрипта"
-# $drCre Address="172.16.0.1" User="user" Password="Passwd" Input=({"sync";"backup";"scripts";"log";"config"}) Name="scriptName"
+# $mkDir User="Имя пользователя" Password="Пароль" Input="Имя создаваемой директории, строкой или массивом" Name="Имя скрипта"
+# $mkDir Address="172.16.0.1" User="user" Password="Passwd" Input=({"sync";"backup";"scripts";"log";"config"}) Name="scriptName"
 
-:global drCre do={
+:global mkDir do={
 	set $Nm [len $Input];
 	set $IP [/ip address get 1 address];
 	/system identity export file=id.rsc
