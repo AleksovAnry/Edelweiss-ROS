@@ -197,7 +197,7 @@
 		if ([typeof $Input]="array") do={set $Nm ($Nm-1);set $Bn ($Input->$Nm);} else={set $Nm 0;set $Bn $Input;}
 		log info "$Name:: Start creating $Bn directory";
 		set $Pth ($Bn . "/1");
-		/tool fetch address=($Address) mode=ftp user=($User) password=($Password) 	src-path=id.rsc dst-path=($Pth)
+		/tool fetch address=($Address) mode=ftp user=($User) password=($Password) src-path=id.rsc dst-path=($Pth)
 		delay 3s;
 		/file remove $Pth
 		log info "$Name:: Done creating $Bn directory";
