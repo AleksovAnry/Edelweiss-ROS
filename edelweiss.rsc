@@ -182,14 +182,14 @@
 
 :global mkDir do={
 	set $Nm [len $Input];
-	set $IP [/ip address get 1 address];
+	set $IP [/ip address get 0 address];
 	/system identity export file=id.rsc
 	if ([typeof $Address]="nothing") do={set $Address [pick $IP 0 [find $IP "/"]];}
 
 	do {
 		if ([typeof $Input]="array") do={set $Nm ($Nm-1);set $Bn ($Input->$Nm);} else={set $Nm 0;set $Bn $Input;}
 		log info "$Name:: Start creating $Bn directory";
-		set $Pth ($Bn . "/1");
+		set $Pth ($Bn . "/in_progress");
 		/tool fetch address=($Address) mode=ftp user=($User) password=($Password) src-path=id.rsc dst-path=($Pth)
 		delay 3s;
 		/file remove $Pth
