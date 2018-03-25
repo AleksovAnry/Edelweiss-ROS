@@ -76,57 +76,6 @@
 
 
 # Применение:
-# $alSet Find="Имя интерфейса" List="Имя экспортируемого файла, строкой или массивом" Name="Имя скрипта"
-# $alSet List="MyList" Name=$scriptName - Добавит все динамические адреса в адрес лист "MyList"
-# $alSet Find="uplink" List="MyList" Name=$scriptName - Добавит адреса всех интерфейсов, имя которых содержит "uplink" в адрес лист "MyList"
-
-:global alSet do={
-	if ([typeof $Find]="nothing") do={
-		set $Ia [/ip address find dynamic];
-	} else={
-		set $Ia [/ip address find where actual-interface~$Find];
-	}
-
-	set $Nm [len $Ia];
-
-	if ($Nm>0) do={
-		do {
-			set $Nm ($Nm-1);
-			set $AI [/ip address get number=($Ia->$Nm) value-name=actual-interface];
-			set $IP [/ip address get number=($Ia->$Nm) value-name=address];
-			set $IP [pick $IP 0 [find $IP "/"]];
-
-			if ([len [/ip firewall address-list find where address=$IP && list=$List]]=0) do={
-				/ip firewall address-list add address=$IP comment=$AI list=$List
-				log info "$Name:: Add interface \"$AI\" $IP to address list \"$List\"";
-			}
-
-		} while ($Nm>0);
-		delay 500ms;
-	}
-
-	set $Ia [/ip firewall address-list find list=$List];
-	set $Nm [len $Ia];
-
-	if ($Nm>0) do={
-		do {
-			set $Nm ($Nm-1);
-			set $AI [/ip firewall address-list get number=($Ia->$Nm) value-name=comment];
-			set $IP [/ip firewall address-list get number=($Ia->$Nm) value-name=address];
-
-			if ([len [/ip address find where address~"$IP/"]]=0) do={
-				/ip firewall address-list remove numbers=($Ia->$Nm)
-				log info "$Name:: Remove interface \"$AI\" $IP from address list \"$List\"";
-			}
-
-		} while ($Nm>0);
-		delay 500ms;
-	}
-
-}
-
-
-# Применение:
 # $ifSta Type="vrrp" Number=2
 # if ([$ifSta Type="vrrp"]=true) do={beep frequency=1760 length=100ms;}
 # if ([$ifSta Type="vrrp" Number=2]=true) do={beep frequency=1760 length=100ms;}
@@ -311,6 +260,57 @@
 		beep frequency=1975 length=10ms;
 		delay 100ms;
 	} while ($Nm>-2 && [typeof $Input]="array");
+}
+
+
+# Применение:
+# $alSet Find="Имя интерфейса" List="Имя экспортируемого файла, строкой или массивом" Name="Имя скрипта"
+# $alSet List="MyList" Name=$scriptName - Добавит все динамические адреса в адрес лист "MyList"
+# $alSet Find="uplink" List="MyList" Name=$scriptName - Добавит адреса всех интерфейсов, имя которых содержит "uplink" в адрес лист "MyList"
+
+:global alSet do={
+	if ([typeof $Find]="nothing") do={
+		set $Ia [/ip address find dynamic];
+	} else={
+		set $Ia [/ip address find where actual-interface~$Find];
+	}
+
+	set $Nm [len $Ia];
+
+	if ($Nm>0) do={
+		do {
+			set $Nm ($Nm-1);
+			set $AI [/ip address get number=($Ia->$Nm) value-name=actual-interface];
+			set $IP [/ip address get number=($Ia->$Nm) value-name=address];
+			set $IP [pick $IP 0 [find $IP "/"]];
+
+			if ([len [/ip firewall address-list find where address=$IP && list=$List]]=0) do={
+				/ip firewall address-list add address=$IP comment=$AI list=$List
+				log info "$Name:: Add interface \"$AI\" $IP to address list \"$List\"";
+			}
+
+		} while ($Nm>0);
+		delay 500ms;
+	}
+
+	set $Ia [/ip firewall address-list find list=$List];
+	set $Nm [len $Ia];
+
+	if ($Nm>0) do={
+		do {
+			set $Nm ($Nm-1);
+			set $AI [/ip firewall address-list get number=($Ia->$Nm) value-name=comment];
+			set $IP [/ip firewall address-list get number=($Ia->$Nm) value-name=address];
+
+			if ([len [/ip address find where address~"$IP/"]]=0) do={
+				/ip firewall address-list remove numbers=($Ia->$Nm)
+				log info "$Name:: Remove interface \"$AI\" $IP from address list \"$List\"";
+			}
+
+		} while ($Nm>0);
+		delay 500ms;
+	}
+
 }
 
 
