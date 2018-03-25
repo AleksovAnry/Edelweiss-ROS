@@ -24,3 +24,10 @@ Edelweiss-ROS - functions library for MikroTik Router OS
 	:global deCon;
 	:global foDte;
 	...
+# 
+Для управление контроллером скриптов используются следующие команды:
+# 
+	$edelctl do=start
+	$edelctl do=stop
+	$edelctl do=restart
+	$edelctl do=status
