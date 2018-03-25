@@ -1,9 +1,9 @@
 :global Edelweiss "v1.2 26.03.18";
-# Поле "от кого" для E-mail. 
+# Поле "от кого" для E-mail.
 :global mlFrm [/tool e-mail get from];
-# Имя системы. 
+# Имя системы.
 :global syNme [/system identity get name];
-# Текущие дата и время. 
+# Текущие дата и время.
 :global cuDte do={return ([/system clock get date]." ".[/system clock get time]);}
 
 
@@ -153,12 +153,12 @@
 	set $Cd ([$foDte Date=[$cuDte]]->0);
 	set $Fa [/file find name~$File];
 	set $Nm [len $Fa];
-	
+
 	set $Lt [pick $History ([len $History]-1) [len $History]];
 	set $Dg [pick $History 0 ([len $History]-1)];
 	set $Ta {s=1;m=60;h=3600;d=86400};
 	set $Ht ($Dg*($Ta->$Lt)-10);
-	
+
 	do {
 		set $Nm ($Nm-1);
 		if ( ($Cd-([$foDte Date=[/file get number=($Fa->$Nm) value-name=creation-time]]->0))>$Ht ) do={
@@ -248,7 +248,7 @@
 		if ($Nm>-1) do={
 			log info "$Name:: Start creating \"$Bn\" file";
 			execute "/$Bn export file=\"$Path/$Prefix-$Bn.rsc\"";
-			log info "$Name:: Done creating \"$Bn\" file";	
+			log info "$Name:: Done creating \"$Bn\" file";
 		}
 
 		if ($Nm<($Nn-1)) do={
