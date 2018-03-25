@@ -1,4 +1,4 @@
-	
+:global Edelweiss "v1.2 26.03.18";
 # Поле "от кого" для E-mail. 
 :global mlFrm [/tool e-mail get from];
 # Имя системы. 
@@ -313,5 +313,87 @@
 
 }
 
+
+# Контроллер работы скриптов и функций. Выполняется каждые 5 секунд при наличии скриптов "Edelweiss" и "Control" а так же глобальных 
+# переменных "controlledScripts" и "controlledFunctions". Следит за работой скриптов и при аварии перезапускает их. Так же будет полезен как
+# некий аналог штатного планировщика для работы функций построенных на базе Edelweiss. 
+# Применение:
+# $edelctl do=start
+# $edelctl do=stop
+# $edelctl do=restart
+# $edelctl do=status
+
+:global edelctl do={
+
+	:local ecsrt do={
+		if ([len [/system script job find where script=Edelweiss]]< 2) do={
+			execute "/system script run Control";
+			execute "/system script run Edelweiss";
+		}
+	}
+
+	:local ecstp do={
+		:global Edelweiss;
+		set $Ia [/system script job find where script=Edelweiss];
+		set $Nm [len $Ia];
+		do {
+			execute "/system script job remove numbers=$Ia"
+			set $Nm ($Nm-1);
+		} while ($Nm>0);
+		log info "Edelweiss:: Stop \"Edelweiss Control\" $Edelweiss";
+	}
+	
+	if ($do="start") do={$ecsrt;}
+	if ($do="stop") do={$ecstp;}
+	if ($do="restart") do={$ecstp;delay 500ms;$ecsrt;}
+	if ($do="status") do={/system script job print where script=Edelweiss}
+}
+
+
+if ([len [/system script job find where script=Edelweiss]]< 2) do={
+	if ([len [/system script find name=Control]]=1) do={
+
+		:global Edelweiss;
+		:global controlledScripts;
+		:global controlledFunctions;
+		if ([typeof $controlledScripts]="array" && [typeof $controlledFunctions]="array") do={
+
+			log info "Edelweiss:: Start \"Edelweiss Control\" $Edelweiss";
+
+			do {
+
+				set $conA ([len $controlledScripts]-1);
+				do {
+					set $ScriptCurrentControl [($controlledScripts->$conA)];
+					if ([len [/system script job find where script=$ScriptCurrentControl]]< 1 && [len [/system script find name=$ScriptCurrentControl]]=1) do={
+						execute "/system script run $ScriptCurrentControl";
+						log info "Edelweiss:: Run \"$ScriptCurrentControl\"";
+					}
+					delay 100ms;
+					set $conA ($conA-1);
+				} while ($conA>-1);
+				
+				set $conB ([len $controlledFunctions]-1);
+				do {
+					set $FunctionCurrentControl [($controlledFunctions->$conB)];			
+					execute "$FunctionCurrentControl Name=Edelweiss";
+					delay 250ms;
+					set $conB ($conB-1);
+				} while ($conB>-1);
+
+				delay 5s;
+			} while (true);
+
+		} else={
+			execute "/system script run Control"
+			execute "/system script run Edelweiss";
+			log warning "Edelweiss:: Control wariable not found. Restart script";
+		}
+
+	} else={
+		log warning "Edelweiss:: Script \"Control\" not found";
+	}
+
+}
 
 
