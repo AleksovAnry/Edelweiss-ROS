@@ -385,10 +385,16 @@ if ([len [/system script job find where script=Edelweiss]]< 2) do={
 			} while (true);
 
 		} else={
-			execute "/system script run Control"
-			execute "/system script run Edelweiss";
-			log warning "Edelweiss:: Control wariable not found. Restart script";
-		}
+				execute "/system script run Control"
+				delay 500ms;
+				if ([typeof $controlledScripts]="array" && [typeof $controlledFunctions]="array") do={				
+					log warning "Edelweiss:: Control variable not found. Restart script";
+					execute "/system script run Edelweiss";
+				} else={
+					log warning "Edelweiss:: Control variable empty. Stop script";
+					execute "$edelctl do=stop";
+				}
+			}
 
 	} else={
 		log warning "Edelweiss:: Script \"Control\" not found";
