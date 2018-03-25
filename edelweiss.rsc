@@ -264,9 +264,9 @@
 
 
 # Применение:
-# $alSet Find="Имя интерфейса" List="Имя экспортируемого файла, строкой или массивом" Name="Имя скрипта"
-# $alSet List="MyList" Name=$scriptName - Добавит все динамические адреса в адрес лист "MyList"
-# $alSet Find="uplink" List="MyList" Name=$scriptName - Добавит адреса всех интерфейсов, имя которых содержит "uplink" в адрес лист "MyList"
+# $alSet Find="Имя или фрагмент имени интерфейса(ов)" List="Название адрес листа" Name="Имя скрипта"
+# $alSet List="MyDynamicList" Name=$scriptName - Добавит все динамически созданные IP адреса в адрес лист "MyDynamicList"
+# $alSet Find="uplink" List="MyUplinkList" Name=$scriptName - Добавит адреса всех интерфейсов, имя которых содержит "uplink" в адрес лист "MyUplinkList"
 
 :global alSet do={
 	if ([typeof $Find]="nothing") do={
