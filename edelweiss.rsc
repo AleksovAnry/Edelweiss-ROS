@@ -1,4 +1,4 @@
-:global Edelweiss "v1.2 26.03.18";
+:global Edelweiss "v1.2 15.04.18";
 # Поле "от кого" для E-mail.
 :global mlFrm [/tool e-mail get from];
 # Имя системы.
@@ -272,7 +272,7 @@
 	if ([typeof $Find]="nothing") do={
 		set $Ia [/ip address find dynamic];
 	} else={
-		set $Ia [/ip address find where actual-interface~$Find];
+		set $Ia [/ip address find where interface~$Find];
 	}
 
 	set $Nm [len $Ia];
@@ -280,7 +280,7 @@
 	if ($Nm>0) do={
 		do {
 			set $Nm ($Nm-1);
-			set $AI [/ip address get number=($Ia->$Nm) value-name=actual-interface];
+			set $AI [/ip address get number=($Ia->$Nm) value-name=interface];
 			set $IP [/ip address get number=($Ia->$Nm) value-name=address];
 			set $IP [pick $IP 0 [find $IP "/"]];
 
